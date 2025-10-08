@@ -13,13 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{1288F8F3-A671-4A8F-B550-AFE993D40720}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Domain", "Services\ProductCatalog\Core\ECommerce.Domain\ECommerce.Domain.csproj", "{2F645533-0E55-416F-9EF0-7270FE546E58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Domain", "Services\ProductCatalog\Core\ECommerce.Domain\ECommerce.Domain.csproj", "{2F645533-0E55-416F-9EF0-7270FE546E58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Application", "Services\ProductCatalog\Core\ECommerce.Application\ECommerce.Application.csproj", "{614E2EB5-A7F3-4FC4-BF5F-B59F4FFDC1E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Application", "Services\ProductCatalog\Core\ECommerce.Application\ECommerce.Application.csproj", "{614E2EB5-A7F3-4FC4-BF5F-B59F4FFDC1E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Infrastructure", "Services\ProductCatalog\Infrastructure\ECommerce.Infrastructure\ECommerce.Infrastructure.csproj", "{F0963A05-FDC3-4262-8DCA-218F02E2FDC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Infrastructure", "Services\ProductCatalog\Infrastructure\ECommerce.Infrastructure\ECommerce.Infrastructure.csproj", "{F0963A05-FDC3-4262-8DCA-218F02E2FDC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.WebAPI", "Services\ProductCatalog\WebAPI\ECommerce.WebAPI\ECommerce.WebAPI.csproj", "{AE0BCD34-3787-40E5-9908-02D0E8B49681}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.WebAPI", "Services\ProductCatalog\WebAPI\ECommerce.WebAPI\ECommerce.WebAPI.csproj", "{AE0BCD34-3787-40E5-9908-02D0E8B49681}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1F4713A6-491C-4063-BFE7-713A5AD39AD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{AE0BCD34-3787-40E5-9908-02D0E8B49681}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE0BCD34-3787-40E5-9908-02D0E8B49681}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE0BCD34-3787-40E5-9908-02D0E8B49681}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F4713A6-491C-4063-BFE7-713A5AD39AD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F4713A6-491C-4063-BFE7-713A5AD39AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F4713A6-491C-4063-BFE7-713A5AD39AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F4713A6-491C-4063-BFE7-713A5AD39AD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

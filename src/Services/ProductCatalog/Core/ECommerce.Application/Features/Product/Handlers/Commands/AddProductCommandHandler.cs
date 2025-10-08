@@ -25,6 +25,7 @@ namespace ECommerce.Application.Features.Product.Handlers.Commands
         public async Task<string> Handle(AddProductCommand request, CancellationToken cancellationToken)
         {
             var product = mapper.Map<ECommerce.Domain.Entity.Product>(request.Product);
+            //product.Id = 
             product = await productRepository.Add(product);
             return product.Id;
         }

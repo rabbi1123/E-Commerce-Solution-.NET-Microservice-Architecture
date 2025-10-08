@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  productcatalogdb:
+    image: mongo
+
+  ecommerce.webapi:
+    image: ${DOCKER_REGISTRY-}ecommercewebapi
+    build:
+      context: .
+      dockerfile: Services/ProductCatalog/WebAPI/ECommerce.WebAPI/Dockerfile
+
+# volumes:
+#   mongo-data:

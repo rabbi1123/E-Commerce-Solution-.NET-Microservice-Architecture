@@ -22,9 +22,9 @@ namespace ECommerce.Application.Features.Product.Handlers.Commands
         }
         public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
-            ECommerce.Domain.Entity.Product product = await productRepository.Get(request.Id);
-            product.Status = "inactive";
-            await productRepository.Update(product);
+            //ECommerce.Domain.Entity.Product product = await productRepository.Get(request.Id);
+            //product.Status = "inactive";
+            await productRepository.Delete(request.Id);
         }
     }
 }

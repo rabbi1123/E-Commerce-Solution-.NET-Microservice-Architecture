@@ -1,11 +1,24 @@
+using ECommerce.Application;
+using ECommerce.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.ConfigureApplicationServices();
+builder.Services.ConfigureProductCatalogInfrastructureServices(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("CorsPolicy",
+        builder => builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+});
 
 var app = builder.Build();
 
@@ -16,8 +29,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
 app.UseAuthorization();
 
+app.UseCors("CorsPolicy");
 app.MapControllers();
 
 app.Run();

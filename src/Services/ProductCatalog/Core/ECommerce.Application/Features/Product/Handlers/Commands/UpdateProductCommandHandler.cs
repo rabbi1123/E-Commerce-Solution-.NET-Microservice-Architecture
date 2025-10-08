@@ -22,9 +22,11 @@ namespace ECommerce.Application.Features.Product.Handlers.Commands
         }
         public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = await productRepository.Get(request.Product.Id);
-            mapper.Map(request.Product, product);
-            await productRepository.Update(product);
+            //var product = await productRepository.Get(request.Product.Id);
+            //mapper.Map(request.Product, product);
+
+            var product = mapper.Map<ECommerce.Domain.Entity.Product>(request.Product);
+            await productRepository.Update(product.Id,product);
             return Unit.Value;
         }
     }

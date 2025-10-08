@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  productcatalogdb:
+    container_name: productcatalogdb
+    restart: always
+    ports:
+     - "27017:27017"
+    # volumes:
+    #  - mongo_data:/data/db
+  ecommerce.webapi:
+    container_name: ecommerce.webapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - "DatabaseSettings:ConnectionString=mongodb://productcatalogdb:27017"
+    depends_on:
+      - productcatalogdb
+    ports:
+      - "8000:80"
