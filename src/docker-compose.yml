@@ -1,11 +1,18 @@
 version: '3.4'
 
 services:
-  productcatalogdb:
-    image: mongo
-
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    ports:
+      - "27017:27017"
   ecommerce.webapi:
+    container_name: ecommerce.webapi
     image: ${DOCKER_REGISTRY-}ecommercewebapi
     build:
       context: .
       dockerfile: Services/ProductCatalog/WebAPI/ECommerce.WebAPI/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - mongodb

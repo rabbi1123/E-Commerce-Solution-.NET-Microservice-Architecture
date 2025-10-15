@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>fabe2be4-1778-49e3-806a-487c88bd9eeb</ProjectGuid>
+    <ProjectGuid>45345017-4c2c-43e0-8eb0-2097981d2b67</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>ecommerce.webapi</DockerServiceName>
