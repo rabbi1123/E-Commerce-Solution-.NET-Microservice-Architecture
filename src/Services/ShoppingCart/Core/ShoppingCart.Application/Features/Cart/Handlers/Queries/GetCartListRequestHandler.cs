@@ -23,7 +23,7 @@ namespace ShoppingCart.Application.Features.Cart.Handlers.Queries
         }
         public async Task<IEnumerable<CartHeaderDto>> Handle(GetCartListRequest request, CancellationToken cancellationToken)
         {
-            var cartList = await cartRepository.GetAll();
+            var cartList = await cartRepository.GetAllCartWithDetails();
             return mapper.Map<List<CartHeaderDto>>(cartList);
         }
     }

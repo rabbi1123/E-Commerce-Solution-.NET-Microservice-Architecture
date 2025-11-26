@@ -14,6 +14,6 @@ namespace ShoppingCart.Application.DTOs.Cart
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public int Count { get; set; }
-        public int CardHeaderDtoId { get; set; }
+        public int CardHeaderId { get; set; }
     }
 }

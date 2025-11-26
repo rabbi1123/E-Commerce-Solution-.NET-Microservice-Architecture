@@ -1,18 +1,48 @@
 version: '3.4'
 
 services:
-  mongodb:
-    container_name: mongodb
-    image: mongo:latest
+  # mongodb:
+  #   container_name: mongodb
+  #   image: mongo:latest
+  #   ports:
+  #     - "27017:27017"
+  # ecommerce.webapi:
+  #   container_name: ecommerce.webapi
+  #   image: ${DOCKER_REGISTRY-}ecommercewebapi
+  #   build:
+  #     context: .
+  #     dockerfile: Services/ProductCatalog/WebAPI/ECommerce.WebAPI/Dockerfile
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - mongodb
+
+  shoppingcart.database:
+    image: postgres:latest
+    container_name: shoppingcart.database
+    environment:
+      - POSTGRES_DB=ShoppingCart
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=test
     ports:
-      - "27017:27017"
-  ecommerce.webapi:
-    container_name: ecommerce.webapi
-    image: ${DOCKER_REGISTRY-}ecommercewebapi
+      - 5432:5432
+  
+  shoppingcart.cache:
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+  
+  shoppingcart.webapi:
+    image: ${DOCKER_REGISTRY-}shoppingcartwebapi
+    container_name: shoppingcart.webapi
     build:
       context: .
-      dockerfile: Services/ProductCatalog/WebAPI/ECommerce.WebAPI/Dockerfile
+      dockerfile: Services/ShoppingCart/WebAPI/ShoppingCart.WebAPI/Dockerfile
     ports:
-      - "8080:80"
+      - 8080:8080
     depends_on:
-      - mongodb
+      - shoppingcart.database
+  
+  
+

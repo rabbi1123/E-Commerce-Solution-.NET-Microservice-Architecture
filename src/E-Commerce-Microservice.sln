@@ -21,8 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.WebAPI", "Services\ProductCatalog\WebAPI\ECommerce.WebAPI\ECommerce.WebAPI.csproj", "{AE0BCD34-3787-40E5-9908-02D0E8B49681}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{45345017-4C2C-43E0-8EB0-2097981D2B67}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShoppingCart", "ShoppingCart", "{FF9E46A8-9630-42B9-B787-B8E57FCD30AD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CC5D16E1-8B00-46F1-8C78-0E4E5DB6A045}"
@@ -31,13 +29,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{74765878-DD62-4164-AD50-CDDABA230152}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Domain", "Services\ShoppingCart\Core\ShoppingCart.Domain\ShoppingCart.Domain.csproj", "{D3739CB6-5EB2-4D4E-89DC-CEBDDD8E5D9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.Domain", "Services\ShoppingCart\Core\ShoppingCart.Domain\ShoppingCart.Domain.csproj", "{D3739CB6-5EB2-4D4E-89DC-CEBDDD8E5D9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Application", "Services\ShoppingCart\Core\ShoppingCart.Application\ShoppingCart.Application.csproj", "{AF4B731C-B27E-4A2E-AAB9-79090F059F9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.Application", "Services\ShoppingCart\Core\ShoppingCart.Application\ShoppingCart.Application.csproj", "{AF4B731C-B27E-4A2E-AAB9-79090F059F9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Infrastructure", "Services\ShoppingCart\Infrastructure\ShoppingCart.Infrastructure\ShoppingCart.Infrastructure.csproj", "{20CE8B54-8141-4E2A-B1EB-CE5D9396BE55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.Infrastructure", "Services\ShoppingCart\Infrastructure\ShoppingCart.Infrastructure\ShoppingCart.Infrastructure.csproj", "{20CE8B54-8141-4E2A-B1EB-CE5D9396BE55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.WebAPI", "Services\ShoppingCart\WebAPI\ShoppingCart.WebAPI\ShoppingCart.WebAPI.csproj", "{F1B73C50-7DDD-47E0-A757-AB7338F0E24E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.WebAPI", "Services\ShoppingCart\WebAPI\ShoppingCart.WebAPI\ShoppingCart.WebAPI.csproj", "{F1B73C50-7DDD-47E0-A757-AB7338F0E24E}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D1CDA604-2CAA-4EBD-8A8A-A5932AC72D7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,10 +61,6 @@ Global
 		{AE0BCD34-3787-40E5-9908-02D0E8B49681}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE0BCD34-3787-40E5-9908-02D0E8B49681}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE0BCD34-3787-40E5-9908-02D0E8B49681}.Release|Any CPU.Build.0 = Release|Any CPU
-		{45345017-4C2C-43E0-8EB0-2097981D2B67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45345017-4C2C-43E0-8EB0-2097981D2B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45345017-4C2C-43E0-8EB0-2097981D2B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{45345017-4C2C-43E0-8EB0-2097981D2B67}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D3739CB6-5EB2-4D4E-89DC-CEBDDD8E5D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D3739CB6-5EB2-4D4E-89DC-CEBDDD8E5D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3739CB6-5EB2-4D4E-89DC-CEBDDD8E5D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -81,6 +77,10 @@ Global
 		{F1B73C50-7DDD-47E0-A757-AB7338F0E24E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1B73C50-7DDD-47E0-A757-AB7338F0E24E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1B73C50-7DDD-47E0-A757-AB7338F0E24E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1CDA604-2CAA-4EBD-8A8A-A5932AC72D7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1CDA604-2CAA-4EBD-8A8A-A5932AC72D7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1CDA604-2CAA-4EBD-8A8A-A5932AC72D7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1CDA604-2CAA-4EBD-8A8A-A5932AC72D7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
