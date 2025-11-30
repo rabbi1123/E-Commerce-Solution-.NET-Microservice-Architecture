@@ -33,6 +33,14 @@ services:
     ports:
       - 6379:6379
   
+  discount.database:
+    image: mysql
+    container_name: discount.database
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+    ports:
+      - 3306:3306
+
   shoppingcart.webapi:
     image: ${DOCKER_REGISTRY-}shoppingcartwebapi
     container_name: shoppingcart.webapi
@@ -43,6 +51,15 @@ services:
       - 8080:8080
     depends_on:
       - shoppingcart.database
-  
-  
+
+  discount.api:
+    image: ${DOCKER_REGISTRY-}discountapi
+    container_name: discount.api
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.API/Dockerfile
+    ports:
+      - 8081:8080
+    depends_on:
+      - discount.database
 
