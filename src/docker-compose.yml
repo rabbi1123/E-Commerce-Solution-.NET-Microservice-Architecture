@@ -55,11 +55,25 @@ services:
   discount.api:
     image: ${DOCKER_REGISTRY-}discountapi
     container_name: discount.api
+    environment:
+      - "GrpcSettings:DiscountUrl=http://discount.grpc"
     build:
       context: .
       dockerfile: Services/Discount/Discount.API/Dockerfile
     ports:
       - 8081:8080
+    depends_on:
+      - discount.database
+
+
+  discount.grpc:
+    image: ${DOCKER_REGISTRY-}discountgrpc
+    container_name: discount.grpc
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.Grpc/Dockerfile
+    ports:
+      - 8082:8080
     depends_on:
       - discount.database
 

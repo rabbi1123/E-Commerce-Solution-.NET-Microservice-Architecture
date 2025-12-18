@@ -1,6 +1,6 @@
-﻿namespace Discount.API.Models
+﻿namespace Discount.Grpc.Models
 {
-    public class Discount : BaseDomainEntity
+    public class ProductDiscount : BaseDomainEntity
     {
         public int ProductId { get; set; }
         public string? ProductName { get; set; }

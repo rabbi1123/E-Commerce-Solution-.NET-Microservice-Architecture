@@ -1,10 +1,15 @@
+using Discount.Grpc.Protos;
 using ShoppingCart.Application;
 using ShoppingCart.Infrastructure;
+using ShoppingCart.WebAPI.GrpcServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
+    (x => x.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]));
+builder.Services.AddScoped<DiscountGrpcService>();
 builder.Services.AddControllers();
 builder.Services.ConfigureShoppingCartApplicationServices();
 builder.Services.ConfigureShoppingCartInfrastructureServices(builder.Configuration);
