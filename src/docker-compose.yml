@@ -41,6 +41,16 @@ services:
     ports:
       - 3306:3306
 
+  ordering.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: ordering.database
+    environment:
+      - SA_PASSWORD= "1234"
+      - ACCEPT_EULA= "Y"
+    restart: always
+    ports:
+      - 1433:1433
+
   shoppingcart.webapi:
     image: ${DOCKER_REGISTRY-}shoppingcartwebapi
     container_name: shoppingcart.webapi
@@ -77,3 +87,13 @@ services:
     depends_on:
       - discount.database
 
+  order.api:
+    image: ${DOCKER_REGISTRY-}orderapi
+    container_name: order.api
+    build:
+      context: .
+      dockerfile: Services/Ordering/WebAPI/Order.API/Dockerfile
+    depends_on:
+      - ordering.database
+    ports:
+      - "8083:8080"

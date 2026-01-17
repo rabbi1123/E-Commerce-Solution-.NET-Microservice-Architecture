@@ -6,7 +6,8 @@
       "serviceActions": {
         "shoppingcart.webapi": "StartDebugging",
         "discount.api": "StartDebugging",
-        "discount.grpc": "StartDebugging"
+        "discount.grpc": "StartDebugging",
+        "order.api": "StartDebugging"
       }
     }
   }

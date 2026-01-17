@@ -27,3 +27,15 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  order.api:
+    container_name: order.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - "ConnectionStrings:OrderConnectionString=Server=ordering.database;Database=OrderDb;User Id=sa;Password=1234"
+    depends_on:
+      - ordering.database
+    ports:
+     - "8080"
+
