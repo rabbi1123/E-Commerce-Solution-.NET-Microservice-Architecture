@@ -34,6 +34,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - "ConnectionStrings:OrderConnectionString=Server=ordering.database;Database=OrderDb;User Id=sa;Password=1234"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672" 
     depends_on:
       - ordering.database
     ports:

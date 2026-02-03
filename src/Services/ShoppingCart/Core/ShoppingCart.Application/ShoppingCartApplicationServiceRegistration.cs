@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,14 +13,23 @@ namespace ShoppingCart.Application
 {
     public static class ShoppingCartApplicationServiceRegistration
     {
-        public static IServiceCollection ConfigureShoppingCartApplicationServices(this IServiceCollection services)
+        public static IServiceCollection ConfigureShoppingCartApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-            return services;
+			services.AddMassTransit(config => {
+				config.SetKebabCaseEndpointNameFormatter();
+				config.UsingRabbitMq((ctx, cfg) =>
+				{
+					cfg.Host(configuration["EventBusSettings:HostAddress"]);
+					cfg.ConfigureEndpoints(ctx);
+				});
+			});
+
+			return services;
         }
     }
 }

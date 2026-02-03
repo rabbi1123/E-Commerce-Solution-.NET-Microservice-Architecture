@@ -29,5 +29,11 @@ namespace ShoppingCart.Infrastructure.Repositories
             var cart = await dbContext.CartHeaders.Include(m => m.CartDetails).FirstOrDefaultAsync(x => x.Id == id);
             return cart;
         }
-    }
+
+		public async Task<CartHeader> GetCartWithDetailsByUserId(string userId)
+		{
+			var cart = await dbContext.CartHeaders.Include(m => m.CartDetails).FirstOrDefaultAsync(x => x.UserId == userId);
+			return cart;
+		}
+	}
 }

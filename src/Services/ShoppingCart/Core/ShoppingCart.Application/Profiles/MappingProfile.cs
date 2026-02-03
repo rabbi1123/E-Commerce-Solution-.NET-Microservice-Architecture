@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Eventbus.Messages.Events;
 using ShoppingCart.Application.DTOs.Cart;
 using ShoppingCart.Domain.Entity;
 using System;
@@ -17,6 +18,7 @@ namespace ShoppingCart.Application.Profiles
                 .ForMember(dest => dest.CartDetails, opt => opt.MapFrom(src => src.CartDetails)).ReverseMap();
             
             CreateMap<CartDetails, CartDetailsDto>().ReverseMap();
+            CreateMap<BasketCheckout, BasketCheckoutEvent>().ReverseMap();
         }
     }
 }

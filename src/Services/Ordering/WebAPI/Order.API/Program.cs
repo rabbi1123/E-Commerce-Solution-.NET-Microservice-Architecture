@@ -1,6 +1,9 @@
 using Order.API;
 using Order.Application;
 using Order.Infrastructure;
+using MassTransit;
+using Eventbus.Messages.Common;
+using Order.API.EventBusConsumer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,21 @@ builder.Services.AddOrderApplicationServices();
 builder.Services.AddOrderInfrastructureServices(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMassTransit(config => {
+	config.SetKebabCaseEndpointNameFormatter();
+	config.AddConsumer<CheckoutConsumer>();
+	config.UsingRabbitMq((ctx, cfg) =>
+	{
+		cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+		cfg.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, c =>
+		{
+			c.ConfigureConsumer<CheckoutConsumer>(ctx);
+		});
+		cfg.ConfigureEndpoints(ctx);
+	});
+});
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddScoped<CheckoutConsumer>();
 
 var app = builder.Build();
 

@@ -11,5 +11,6 @@ namespace ShoppingCart.Application.Persistence.Contracts
     {
         Task<List<CartHeader>> GetAllCartWithDetails();
         Task<CartHeader> GetCartWithDetails(int id);
-    }
+		Task<CartHeader> GetCartWithDetailsByUserId(string userId);
+	}
 }

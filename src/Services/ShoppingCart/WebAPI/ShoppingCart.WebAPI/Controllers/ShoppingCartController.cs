@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Google.Protobuf.WellKnownTypes;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Application.DTOs.Cart;
@@ -66,5 +67,13 @@ namespace ShoppingCart.WebAPI.Controllers
             await sender.Send(new DeleteCartCommand(cart));
             return Ok();
         }
+
+        [Route("[action]")]
+        [HttpPost]
+        public async Task<IActionResult> Checkout([FromBody] BasketCheckout basketCheckout)
+        {
+			var result = await sender.Send(new CheckoutCart(basketCheckout));
+			return Ok(result);
+		}
     }
 }
