@@ -1,42 +1,35 @@
 version: '3.4'
 
-services:
-  shoppingcart.webapi:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-    ports:
-      - 8080:8080
+# services:
+#   shoppingcart.webapi:
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Development
+#       - ASPNETCORE_HTTP_PORTS=8080
+#     # ports:
+#     #   - 8080:8080
 
-  discount.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-    ports:
-      - "8080"
+#   discount.api:
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Development
+#       - ASPNETCORE_HTTP_PORTS=8080
+#     # ports:
+#     #   - "8080"
 
 
-  discount.grpc:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
-    ports:
-      - "8080"
-      - "8081"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+#   discount.grpc:
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Development
+#       - ASPNETCORE_HTTP_PORTS=8080
+#       - ASPNETCORE_HTTPS_PORTS=8081
+    # ports:
+    #   - "8080"
+    #   - "8081"
+    # Volumes commented out so compose runs without host paths (enable for local dev secrets if needed)
+    # volumes:
+    #   - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+    #   - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
 
-  order.api:
-    container_name: order.api
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - "ConnectionStrings:OrderConnectionString=Server=ordering.database;Database=OrderDb;User Id=sa;Password=1234"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672" 
-    depends_on:
-      - ordering.database
-    ports:
-     - "8080"
+  # order.api:
+  #   container_name: order.api
+    
 

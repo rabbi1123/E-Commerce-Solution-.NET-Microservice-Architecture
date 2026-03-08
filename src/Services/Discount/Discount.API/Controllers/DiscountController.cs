@@ -17,27 +17,27 @@ namespace Discount.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ProductDiscount>> GetDiscount(int productId)
+        public async Task<ActionResult<ProductDiscount>> Get(int productId)
         {
             var discount = await repository.GetDiscount(productId);
             return Ok(discount);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductDiscount>> CreateDiscount([FromBody] ProductDiscount discount)
+        public async Task<ActionResult<ProductDiscount>> Create([FromBody] ProductDiscount discount)
         {
             await repository.CreateDiscount(discount);
             return CreatedAtRoute("GetDiscount", new { productId = discount.ProductId }, discount);
         }
 
         [HttpPut]
-        public async Task<ActionResult<ProductDiscount>> UpdateDiscount([FromBody] ProductDiscount discount)
+        public async Task<ActionResult<ProductDiscount>> Update([FromBody] ProductDiscount discount)
         {
             return Ok(await repository.UpdateDiscount(discount));
         }
 
         [HttpDelete]
-        public async Task<ActionResult<bool>> DeleteDiscount(int productId)
+        public async Task<ActionResult<bool>> Delete(int productId)
         {
             return Ok(await repository.DeleteDiscount(productId));
         }

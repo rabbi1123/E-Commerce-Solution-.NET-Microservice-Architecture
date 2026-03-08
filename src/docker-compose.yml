@@ -1,24 +1,14 @@
 version: '3.4'
 
 services:
-  # mongodb:
-  #   container_name: mongodb
-  #   image: mongo:latest
-  #   ports:
-  #     - "27017:27017"
-  # ecommerce.webapi:
-  #   container_name: ecommerce.webapi
-  #   image: ${DOCKER_REGISTRY-}ecommercewebapi
-  #   build:
-  #     context: .
-  #     dockerfile: Services/ProductCatalog/WebAPI/ECommerce.WebAPI/Dockerfile
-  #   ports:
-  #     - "8080:80"
-  #   depends_on:
-  #     - mongodb
+  mongodb:
+    container_name: mongodb
+    image: mongo:7
+    ports:
+      - "27017:27017"
 
   shoppingcart.database:
-    image: postgres:latest
+    image: postgres:16-alpine
     container_name: shoppingcart.database
     environment:
       - POSTGRES_DB=ShoppingCart
@@ -28,13 +18,13 @@ services:
       - 5432:5432
   
   shoppingcart.cache:
-    image: redis:latest
+    image: redis:7-alpine
     restart: always
     ports:
       - 6379:6379
   
   discount.database:
-    image: mysql
+    image: mysql:8.0
     container_name: discount.database
     environment:
       - MYSQL_ROOT_PASSWORD=123
@@ -45,8 +35,9 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: ordering.database
     environment:
-      - SA_PASSWORD= "1234"
-      - ACCEPT_EULA= "Y"
+      - SA_PASSWORD= 1234
+      - ACCEPT_EULA= Y
+      - MSSQL_PID= Express
     restart: always
     ports:
       - 1433:1433
@@ -58,6 +49,17 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+   
+  ecommerce.webapi:
+    container_name: ecommerce.webapi
+    image: ${DOCKER_REGISTRY-}ecommercewebapi
+    build:
+      context: .
+      dockerfile: Services/ProductCatalog/WebAPI/ECommerce.WebAPI/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - mongodb
 
   shoppingcart.webapi:
     image: ${DOCKER_REGISTRY-}shoppingcartwebapi
@@ -70,7 +72,7 @@ services:
       # - ASPNETCORE_HTTP_PORTS=8080
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672" 
     ports:
-      - 8080:8080
+      - 8081:8080
     depends_on:
       - shoppingcart.database
       - rabbitmq
@@ -84,7 +86,7 @@ services:
       context: .
       dockerfile: Services/Discount/Discount.API/Dockerfile
     ports:
-      - 8081:8080
+      - 8082:8080
     depends_on:
       - discount.database
 
@@ -96,7 +98,7 @@ services:
       context: .
       dockerfile: Services/Discount/Discount.Grpc/Dockerfile
     ports:
-      - 8082:8080
+      - 8083:8080
     depends_on:
       - discount.database
 
@@ -108,11 +110,11 @@ services:
       dockerfile: Services/Ordering/WebAPI/Order.API/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
+      # - ASPNETCORE_HTTP_PORTS=8080
       - "ConnectionStrings:OrderConnectionString=Server=ordering.database;Database=OrderDb;User Id=sa;Password=1234"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       - ordering.database
       - rabbitmq
     ports:
-      - "8083:8080"
+      - "8084:8080"

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using ShoppingCart.Infrastructure;
 
-namespace ShoppingCart.Infrastructure
+namespace ShoppingCart.WebAPI
 {
     public static class MigrationExtension
     {

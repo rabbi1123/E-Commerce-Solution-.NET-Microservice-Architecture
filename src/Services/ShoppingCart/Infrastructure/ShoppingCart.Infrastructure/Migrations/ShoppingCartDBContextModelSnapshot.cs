@@ -58,6 +58,9 @@ namespace ShoppingCart.Infrastructure.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("text");
 
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("double precision");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CardHeaderId");
@@ -73,10 +76,6 @@ namespace ShoppingCart.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CouponCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -91,6 +90,9 @@ namespace ShoppingCart.Infrastructure.Migrations
 
                     b.Property<string>("Status")
                         .HasColumnType("text");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("UserId")
                         .IsRequired()

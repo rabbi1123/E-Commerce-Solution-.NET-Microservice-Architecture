@@ -2,6 +2,7 @@ using Discount.Grpc.Protos;
 using MassTransit;
 using ShoppingCart.Application;
 using ShoppingCart.Infrastructure;
+using ShoppingCart.WebAPI;
 using ShoppingCart.WebAPI.GrpcServices;
 
 var builder = WebApplication.CreateBuilder(args);
