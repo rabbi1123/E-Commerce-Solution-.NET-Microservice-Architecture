@@ -118,3 +118,20 @@ services:
       - rabbitmq
     ports:
       - "8084:8080"
+
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    container_name: apigateway
+    build:
+      context: .
+      dockerfile: ApiGateways/ApiGateway/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - ecommerce.webapi
+      - shoppingcart.webapi
+      - discount.api
+      - order.api
+    ports:
+      - "8085:8080"
+

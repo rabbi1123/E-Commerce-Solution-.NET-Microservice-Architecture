@@ -6,20 +6,37 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8080
+          "Host": "ecommerce.webapi",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/Product",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "FileCacheOptions": { "TtlSeconds": 30 },
+      "RateLimitOptions": {
+        // rule, partition by
+        "ClientIdHeader": "",
+        "ClientWhitelist": [ "" ],
+        // management opts
+        "EnableRateLimiting": true,
+        "EnableHeaders": true,
+        // algorithm
+        "Limit": 1,
+        "Period": "",
+        "Wait": "",
+        // extended opts
+        "StatusCode": 1,
+        "QuotaMessage": "",
+        "KeyPrefix": ""
+      }
     },
     {
       "DownstreamPathTemplate": "/api/Product/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8080
+          "Host": "ecommerce.webapi",
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/Product/{id}",
@@ -31,8 +48,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8081
+          "Host": "shoppingcart.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/ShoppingCart",
@@ -43,8 +60,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8081
+          "Host": "shoppingcart.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/ShoppingCart/{id}",
@@ -55,8 +72,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8081
+          "Host": "shoppingcart.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/ShoppingCart/Checkout",
@@ -68,8 +85,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8082
+          "Host": "discount.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/Discount",
@@ -80,8 +97,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8082
+          "Host": "discount.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/Discount/{productId}",
@@ -93,8 +110,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8084
+          "Host": "order.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/Order/{userName}",
