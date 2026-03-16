@@ -42,3 +42,11 @@ version: '3.4'
 #     ports:
 #       - "8080"
 
+
+services:
+  user.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    
+

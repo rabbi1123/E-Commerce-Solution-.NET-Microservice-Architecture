@@ -41,6 +41,17 @@ services:
     restart: always
     ports:
       - 1433:1433
+
+  user.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: user.database
+    environment:
+      - SA_PASSWORD= 1234
+      - ACCEPT_EULA= Y
+      - MSSQL_PID= Express
+    restart: always
+    ports:
+      - 1434:1433
    
   rabbitmq:
     image: rabbitmq:3-management
@@ -132,6 +143,20 @@ services:
       - shoppingcart.webapi
       - discount.api
       - order.api
+    ports:
+      - "8086:8080"
+
+
+  user.api:
+    image: ${DOCKER_REGISTRY-}userapi
+    container_name: user.api
+    build:
+      context: .
+      dockerfile: Services/User/User.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - user.database
     ports:
       - "8085:8080"
 
