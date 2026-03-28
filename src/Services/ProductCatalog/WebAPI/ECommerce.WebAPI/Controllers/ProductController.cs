@@ -2,6 +2,7 @@
 using ECommerce.Application.Features.Product.Requests.Commands;
 using ECommerce.Application.Features.Product.Requests.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -34,7 +35,8 @@ namespace ECommerce.WebAPI.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] ProductCreateDto value)
+		[Authorize(Roles = "Administrator")]
+		public async Task<ActionResult> Post([FromBody] ProductCreateDto value)
         {
             var result = await sender.Send(new AddProductCommand(value));
             return Ok(result);

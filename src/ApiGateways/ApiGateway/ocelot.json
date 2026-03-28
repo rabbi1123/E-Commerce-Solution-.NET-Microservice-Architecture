@@ -1,5 +1,18 @@
 {
   "Routes": [
+    //Authentication Web API
+    {
+      "UpstreamPathTemplate": "/Account",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/Account",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authenticationwebapi",
+          "Port": 8086
+        }
+      ]
+    },
     //Product Catalog
     {
       "DownstreamPathTemplate": "/api/Product",
@@ -116,9 +129,46 @@
       ],
       "UpstreamPathTemplate": "/Order/{userName}",
       "UpstreamHttpMethod": [ "Get" ]
+    },
+
+    //User
+    {
+      "DownstreamPathTemplate": "/api/User",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/User",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Administrator"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/User/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/User/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5141"
+    "BaseUrl": "http://localhost:5141",
+    "RateLimitOptions": {
+      "QuotaExceedMessage": "Request not allowed",
+      "HttpStatusCode": 909
+    }
   }
 }

@@ -4,6 +4,7 @@ using User.API.Data;
 using User.API.Models;
 using User.API.Repositories;
 using User.API.Services;
+using JwtConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
+builder.Services.AddCustomJwtAuthentication();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -28,6 +30,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

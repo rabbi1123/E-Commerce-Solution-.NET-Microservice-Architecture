@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Auth\JwtConfiguration\JwtConfiguration.csproj" />
     <ProjectReference Include="..\..\Core\ECommerce.Application\ECommerce.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\ECommerce.Infrastructure\ECommerce.Infrastructure.csproj" />
   </ItemGroup>

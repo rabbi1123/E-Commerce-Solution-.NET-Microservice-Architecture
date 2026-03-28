@@ -1,5 +1,6 @@
 using ECommerce.Application;
 using ECommerce.Infrastructure;
+using JwtConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.ConfigureProductCatalogInfrastructureServices(builder.Configura
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCustomJwtAuthentication();
 
 builder.Services.AddCors(o =>
 {
@@ -30,6 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors("CorsPolicy");

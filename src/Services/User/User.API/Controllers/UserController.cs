@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using User.API.Models;
 using User.API.Services;
@@ -16,6 +17,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAll()
     {
         var users = await _userService.GetAllAsync();
