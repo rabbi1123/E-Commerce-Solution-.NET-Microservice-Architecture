@@ -1,0 +1,58 @@
+version: '3.4'
+
+services:
+   productcatalog.webapi:
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_HTTP_PORTS=8080
+     ports:
+       - "8080:8080"
+
+   shoppingcart.webapi:
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_HTTP_PORTS=8080
+     ports:
+       - "8081:8080"
+
+   discount.api:
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_HTTP_PORTS=8080
+     ports:
+       - "8082:8080"
+
+   discount.grpc:
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_HTTP_PORTS=8080
+     ports:
+       - "8083:8080"
+
+   order.api:
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_HTTP_PORTS=8080
+     ports:
+       - "8084:8080"
+
+   user.api:
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_HTTP_PORTS=8080
+     ports:
+       - "8085:8080"
+
+   apigateway:
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_HTTP_PORTS=8080
+     ports:
+       - "8086:8080"
+
+   identitywebapi:
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_HTTP_PORTS=8080
+     ports:
+       - "8087:8080"

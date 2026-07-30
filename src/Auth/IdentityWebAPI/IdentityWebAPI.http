@@ -1,0 +1,55 @@
+@IdentityWebAPI_HostAddress = http://localhost:5230
+
+### Register
+POST {{IdentityWebAPI_HostAddress}}/api/Account/register
+Content-Type: application/json
+
+{
+  "email": "user@test.com",
+  "password": "Pass123",
+  "role": "User"
+}
+
+### Login
+POST {{IdentityWebAPI_HostAddress}}/api/Account/login
+Content-Type: application/json
+
+{
+  "email": "user@test.com",
+  "password": "Pass123"
+}
+
+### Refresh
+POST {{IdentityWebAPI_HostAddress}}/api/Account/refresh
+Content-Type: application/json
+
+{
+  "accessToken": "",
+  "refreshToken": ""
+}
+
+### Logout
+POST {{IdentityWebAPI_HostAddress}}/api/Account/logout
+Content-Type: application/json
+
+{
+  "refreshToken": ""
+}
+
+### Forgot password
+POST {{IdentityWebAPI_HostAddress}}/api/Account/forgot-password
+Content-Type: application/json
+
+{
+  "email": "user@test.com"
+}
+
+### Reset password
+POST {{IdentityWebAPI_HostAddress}}/api/Account/reset-password
+Content-Type: application/json
+
+{
+  "email": "user@test.com",
+  "token": "",
+  "newPassword": "Pass1234"
+}

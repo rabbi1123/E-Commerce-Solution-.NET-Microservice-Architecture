@@ -1,0 +1,176 @@
+version: '3.4'
+
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo:7
+    ports:
+      - "27017:27017"
+
+  shoppingcart.database:
+    image: postgres:16-alpine
+    container_name: shoppingcart.database
+    environment:
+      - POSTGRES_DB=ShoppingCart
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
+  
+  discount.database:
+    image: mysql:8.0
+    container_name: discount.database
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - 3306:3306
+
+  ordering.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: ordering.database
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    restart: always
+    ports:
+      - 1433:1433
+
+  user.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: user.database
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    restart: always
+    ports:
+      - 1434:1433
+
+  identitydb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: identitydb
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    restart: always
+    ports:
+      - 1435:1433
+   
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  productcatalog.webapi:
+    image: ${DOCKER_REGISTRY-}productcatalogwebapi
+    container_name: productcatalog.webapi
+    build:
+      context: .
+      dockerfile: Services/ProductCatalog/ProductCatalog.WebAPI/Dockerfile
+    environment:
+      - DatabaseSettings__ConnectionString=mongodb://mongodb:27017
+      - DatabaseSettings__DatabaseName=ProductDB
+      - DatabaseSettings__CollectionName=Products
+    depends_on:
+      - mongodb
+   
+  shoppingcart.webapi:
+    image: ${DOCKER_REGISTRY-}shoppingcartwebapi
+    container_name: shoppingcart.webapi
+    build:
+      context: .
+      dockerfile: Services/ShoppingCart/WebAPI/ShoppingCart.WebAPI/Dockerfile
+    environment:
+      - GrpcSettings__DiscountUrl=http://discount.grpc
+      - ConnectionStrings__DefaultConnection=Host=shoppingcart.database;Database=ShoppingCart;Username=postgres;Password=${POSTGRES_PASSWORD}; Port=5432; Pooling=true;
+      - EventBusSettings__HostAddress=amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
+    depends_on:
+      - shoppingcart.database
+      - rabbitmq
+
+  discount.api:
+    image: ${DOCKER_REGISTRY-}discountapi
+    container_name: discount.api
+    environment:
+      - ConnectionStrings__DiscountDbConnection=Server=discount.database;Database=DiscountDb;Username=root;Password=${MYSQL_ROOT_PASSWORD};Port=3306
+      - "GrpcSettings:DiscountUrl=http://discount.grpc"
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.API/Dockerfile
+    depends_on:
+      - discount.database
+
+  discount.grpc:
+    image: ${DOCKER_REGISTRY-}discountgrpc
+    container_name: discount.grpc
+    environment:
+      - ConnectionStrings__DiscountDbConnection=Server=discount.database;Database=DiscountDb;Username=root;Password=${MYSQL_ROOT_PASSWORD};Port=3306
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.Grpc/Dockerfile
+    depends_on:
+      - discount.database
+
+  order.api:
+    image: ${DOCKER_REGISTRY-}orderapi
+    container_name: order.api
+    build:
+      context: .
+      dockerfile: Services/Ordering/WebAPI/Order.API/Dockerfile
+    environment:
+      - ConnectionStrings__OrderConnectionString=Server=ordering.database;Database=OrderDb;User Id=sa;Password=${SA_PASSWORD}
+      - EventBusSettings__HostAddress=amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
+    depends_on:
+      - ordering.database
+      - rabbitmq
+
+  user.api:
+    image: ${DOCKER_REGISTRY-}userapi
+    container_name: user.api
+    build:
+      context: .
+      dockerfile: Services/User/User.API/Dockerfile
+    environment:
+      - ConnectionStrings__UserConnectionString=Server=user.database,1434;Database=UserDb;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;
+      - EventBusSettings__HostAddress=amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
+    depends_on:
+      - user.database
+      - rabbitmq
+
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    container_name: apigateway
+    build:
+      context: .
+      dockerfile: ApiGateways/ApiGateway/Dockerfile
+    depends_on:
+      - productcatalog.webapi
+      - shoppingcart.webapi
+      - discount.api
+      - order.api
+      - user.api
+      - identitywebapi
+
+  identitywebapi:
+    image: ${DOCKER_REGISTRY-}identitywebapi
+    container_name: identitywebapi
+    build:
+      context: .
+      dockerfile: Auth/IdentityWebAPI/Dockerfile
+    environment:
+      - ConnectionStrings__IdentityConnectionString=Server=identitydb;Database=IdentityDb;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=IdentityWebAPI
+      - Jwt__Audience=ECommerceClients
+      - EventBusSettings__HostAddress=amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
+    depends_on:
+      - identitydb
+      - rabbitmq
