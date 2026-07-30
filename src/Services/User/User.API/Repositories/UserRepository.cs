@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using User.API.Data;
-using User.API.Models;
+using UserEntity = User.API.Models.User;
 
 namespace User.API.Repositories;
 
@@ -13,48 +13,47 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
+    public async Task<IEnumerable<UserEntity>> GetAllAsync()
     {
         return await _context.Users.AsNoTracking().ToListAsync();
     }
 
-    public async Task<ApplicationUser?> GetByIdAsync(int id)
+    public async Task<UserEntity?> GetByIdAsync(Guid userId)
     {
-        return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+        return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == userId);
     }
 
-    public async Task<ApplicationUser> AddAsync(ApplicationUser user)
+    public async Task<UserEntity> AddAsync(UserEntity user)
     {
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
         return user;
     }
 
-    public async Task<ApplicationUser?> UpdateAsync(ApplicationUser user)
+    public async Task<UserEntity?> UpdateAsync(UserEntity user)
     {
-        var existing = await _context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+        var existing = await _context.Users.FirstOrDefaultAsync(u => u.UserId == user.UserId);
         if (existing is null)
         {
             return null;
         }
 
-        existing.UserName = user.UserName;
         existing.Email = user.Email;
-        existing.Name = user.Name;
+        existing.FirstName = user.FirstName;
         existing.LastName = user.LastName;
+        existing.Phone = user.Phone;
         existing.Address = user.Address;
-        existing.IsActive = user.IsActive;
-        existing.UserType = user.UserType;
-        existing.UpdatedAt = user.UpdatedAt;
-        existing.UpdatedBy = user.UpdatedBy;
+        existing.Photo = user.Photo;
+        existing.Gender = user.Gender;
+        existing.BirthDate = user.BirthDate;
 
         await _context.SaveChangesAsync();
         return existing;
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(Guid userId)
     {
-        var existing = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        var existing = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
         if (existing is null)
         {
             return false;
@@ -65,4 +64,3 @@ public class UserRepository : IUserRepository
         return true;
     }
 }
-

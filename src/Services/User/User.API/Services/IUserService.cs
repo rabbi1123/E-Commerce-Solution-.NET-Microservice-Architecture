@@ -1,13 +1,12 @@
-using User.API.Models;
+using UserEntity = User.API.Models.User;
 
 namespace User.API.Services;
 
 public interface IUserService
 {
-    Task<IEnumerable<ApplicationUser>> GetAllAsync();
-    Task<ApplicationUser?> GetByIdAsync(int id);
-    Task<ApplicationUser> CreateAsync(ApplicationUser user);
-    Task<ApplicationUser?> UpdateAsync(int id, ApplicationUser user);
-    Task<bool> DeleteAsync(int id);
+    Task<IEnumerable<UserEntity>> GetAllAsync();
+    Task<UserEntity?> GetByIdAsync(Guid userId);
+    Task<UserEntity> CreateAsync(UserEntity user);
+    Task<UserEntity?> UpdateAsync(Guid userId, UserEntity user);
+    Task<bool> DeleteAsync(Guid userId);
 }
-

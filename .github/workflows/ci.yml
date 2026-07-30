@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  DOTNET_VERSION: "8.0.x"
+  SOLUTION: E-Commerce-Microservice.sln
+
+jobs:
+  build-and-test:
+    name: Build and Unit Tests
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION }}
+
+      - name: Build
+        run: dotnet build ${{ env.SOLUTION }} --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: dotnet test ${{ env.SOLUTION }} --configuration Release --no-build --verbosity normal
+
+  docker-and-test:
+    name: Docker Build and Unit Tests
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.SOLUTION }}
+
+      - name: Run unit tests
+        run: dotnet test ${{ env.SOLUTION }} --configuration Release --verbosity normal
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker images
+        run: |
+          docker compose build \
+            productcatalog.webapi \
+            shoppingcart.webapi \
+            discount.api \
+            discount.grpc \
+            order.api \
+            user.api \
+            apigateway \
+            identitywebapi

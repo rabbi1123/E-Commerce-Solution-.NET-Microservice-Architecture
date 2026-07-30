@@ -1,5 +1,4 @@
 using Discount.Grpc.Protos;
-using MassTransit;
 using ShoppingCart.Application;
 using ShoppingCart.Infrastructure;
 using ShoppingCart.WebAPI;
@@ -9,23 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+var discountUrl = Environment.GetEnvironmentVariable("GrpcSettings__DiscountUrl");
 builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
-    (x => x.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]));
+    (x => x.Address = new Uri(discountUrl));
 builder.Services.AddScoped<DiscountGrpcService>();
-//builder.Services.AddMassTransit(config => {
-//                config.SetKebabCaseEndpointNameFormatter();
-//                config.UsingRabbitMq((ctx, cfg) =>
-//                    {
-//                        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
-//                        cfg.ConfigureEndpoints(ctx);
-//                    });
-//                });
-
-//builder.Services.AddMassTransitHostedService();
 
 builder.Services.AddControllers();
-builder.Services.ConfigureShoppingCartApplicationServices(builder.Configuration);
-builder.Services.ConfigureShoppingCartInfrastructureServices(builder.Configuration);
+builder.Services.ConfigureShoppingCartApplicationServices();
+builder.Services.ConfigureShoppingCartInfrastructureServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

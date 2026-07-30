@@ -1,58 +1,66 @@
 {
   "Routes": [
-    //Authentication Web API
+    //Identity Web API
     {
-      "UpstreamPathTemplate": "/Account",
+      "UpstreamPathTemplate": "/Account/{action}",
       "UpstreamHttpMethod": [ "Post" ],
-      "DownstreamPathTemplate": "/api/Account",
+      "DownstreamPathTemplate": "/api/Account/{action}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "authenticationwebapi",
-          "Port": 8086
+          "Host": "identitywebapi",
+          "Port": 8080
         }
       ]
     },
     //Product Catalog
     {
-      "DownstreamPathTemplate": "/api/Product",
+      "DownstreamPathTemplate": "/api/Catalog",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "ecommerce.webapi",
-          "Port": 80
+          "Host": "productcatalog.webapi",
+          "Port": 8080
         }
       ],
-      "UpstreamPathTemplate": "/Product",
+      "UpstreamPathTemplate": "/Catalog",
       "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
-      "FileCacheOptions": { "TtlSeconds": 30 },
-      "RateLimitOptions": {
-        // rule, partition by
-        "ClientIdHeader": "",
-        "ClientWhitelist": [ "" ],
-        // management opts
-        "EnableRateLimiting": true,
-        "EnableHeaders": true,
-        // algorithm
-        "Limit": 1,
-        "Period": "",
-        "Wait": "",
-        // extended opts
-        "StatusCode": 1,
-        "QuotaMessage": "",
-        "KeyPrefix": ""
-      }
+      "FileCacheOptions": { "TtlSeconds": 30 }
     },
     {
-      "DownstreamPathTemplate": "/api/Product/{id}",
+      "DownstreamPathTemplate": "/api/Catalog/GetProductByName/{name}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "ecommerce.webapi",
-          "Port": 80
+          "Host": "productcatalog.webapi",
+          "Port": 8080
         }
       ],
-      "UpstreamPathTemplate": "/Product/{id}",
+      "UpstreamPathTemplate": "/Catalog/GetProductByName/{name}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Catalog/GetProductByCategory/{category}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "productcatalog.webapi",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/GetProductByCategory/{category}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Catalog/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "productcatalog.webapi",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ]
     },
     //Shopping Cart

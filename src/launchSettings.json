@@ -10,7 +10,9 @@
         "order.api": "StartDebugging",
         "apigateway": "StartDebugging",
         "user.api": "StartDebugging",
-        "authenticationwebapi": "StartDebugging"
+        "authenticationwebapi": "StartDebugging",
+        "identitywebapi": "StartDebugging",
+        "productcatalog.webapi": "StartDebugging"
       }
     }
   }

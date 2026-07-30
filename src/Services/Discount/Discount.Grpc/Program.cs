@@ -1,17 +1,16 @@
 using Discount.Grpc.Repositories;
 using Discount.Grpc.Services;
-using Microsoft.Extensions.DependencyInjection;
 using MySql.Data.MySqlClient;
 using System.Data;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddAutoMapper(typeof(Program));
+var discountDbConnection = Environment.GetEnvironmentVariable("ConnectionStrings__DiscountDbConnection");
 builder.Services.AddScoped<IDbConnection>(sp =>
-    new MySqlConnection(builder.Configuration.GetConnectionString("DiscountDbConnection"))
+	new MySqlConnection(discountDbConnection)
 );
 builder.Services.AddGrpc();
 

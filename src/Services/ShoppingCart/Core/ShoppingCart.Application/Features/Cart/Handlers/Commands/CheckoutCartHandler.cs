@@ -4,11 +4,6 @@ using MassTransit;
 using MediatR;
 using ShoppingCart.Application.Features.Cart.Requests.Commands;
 using ShoppingCart.Application.Persistence.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShoppingCart.Application.Features.Cart.Handlers.Commands
 {
@@ -19,12 +14,12 @@ namespace ShoppingCart.Application.Features.Cart.Handlers.Commands
 		private readonly IPublishEndpoint publishEndpoint;
 
 		public CheckoutCartHandler(ICartHeaderRepository cartRepository, IMapper mapper, IPublishEndpoint publishEndpoint)
-        {
+		{
 			this.cartRepository = cartRepository;
 			this.mapper = mapper;
 			this.publishEndpoint = publishEndpoint;
 		}
-        public async Task<Unit> Handle(CheckoutCart request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(CheckoutCart request, CancellationToken cancellationToken)
 		{
 			var basket = await cartRepository.GetCartWithDetailsByUserId(request.BasketCheckout.UserName);
 			if (basket == null)

@@ -12,12 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Database context
-var dbHost = "localhost";
-var dbName = "DiscountDb";
-var dbPass = "123";
-
-builder.Services.AddDbContext<DiscountDbContext>(o => o.UseMySQL(builder.Configuration.GetConnectionString("DiscountDbConnection")));
+var discountDbConnection = Environment.GetEnvironmentVariable("ConnectionStrings__DiscountDbConnection");
+builder.Services.AddDbContext<DiscountDbContext>(o => o.UseMySQL(discountDbConnection));
 
 var app = builder.Build();
 

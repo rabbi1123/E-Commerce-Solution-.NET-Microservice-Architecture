@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddOrderApplicationServices();
-builder.Services.AddOrderInfrastructureServices(builder.Configuration);
+builder.Services.AddOrderInfrastructureServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(config => {
@@ -20,7 +20,7 @@ builder.Services.AddMassTransit(config => {
 	config.AddConsumer<CheckoutConsumer>();
 	config.UsingRabbitMq((ctx, cfg) =>
 	{
-		cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+		cfg.Host(Environment.GetEnvironmentVariable("EventBusSettings__HostAddress"));
 		cfg.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, c =>
 		{
 			c.ConfigureConsumer<CheckoutConsumer>(ctx);

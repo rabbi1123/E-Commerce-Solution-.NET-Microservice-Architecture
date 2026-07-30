@@ -1,5 +1,5 @@
-using User.API.Models;
 using User.API.Repositories;
+using UserEntity = User.API.Models.User;
 
 namespace User.API.Services;
 
@@ -12,26 +12,21 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public Task<IEnumerable<ApplicationUser>> GetAllAsync()
+    public Task<IEnumerable<UserEntity>> GetAllAsync()
         => _userRepository.GetAllAsync();
 
-    public Task<ApplicationUser?> GetByIdAsync(int id)
-        => _userRepository.GetByIdAsync(id);
+    public Task<UserEntity?> GetByIdAsync(Guid userId)
+        => _userRepository.GetByIdAsync(userId);
 
-    public async Task<ApplicationUser> CreateAsync(ApplicationUser user)
-    {
-        user.CreatedAt = DateTime.UtcNow;
-        return await _userRepository.AddAsync(user);
-    }
+    public Task<UserEntity> CreateAsync(UserEntity user)
+        => _userRepository.AddAsync(user);
 
-    public async Task<ApplicationUser?> UpdateAsync(int id, ApplicationUser user)
+    public async Task<UserEntity?> UpdateAsync(Guid userId, UserEntity user)
     {
-        user.Id = id;
-        user.UpdatedAt = DateTime.UtcNow;
+        user.UserId = userId;
         return await _userRepository.UpdateAsync(user);
     }
 
-    public Task<bool> DeleteAsync(int id)
-        => _userRepository.DeleteAsync(id);
+    public Task<bool> DeleteAsync(Guid userId)
+        => _userRepository.DeleteAsync(userId);
 }
-

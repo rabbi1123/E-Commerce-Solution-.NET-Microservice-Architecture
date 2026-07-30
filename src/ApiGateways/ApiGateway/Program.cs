@@ -1,7 +1,6 @@
 using Ocelot.Cache.CacheManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using JwtConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
@@ -9,8 +8,6 @@ builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
 	.AddEnvironmentVariables();
 builder.Services.AddOcelot(builder.Configuration)
 	.AddCacheManager(settings => settings.WithDictionaryHandle());
-
-builder.Services.AddCustomJwtAuthentication();
 
 var app = builder.Build();
 await app.UseOcelot();

@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using User.API.Models;
 using User.API.Services;
+using UserEntity = User.API.Models.User;
 
 namespace User.API.Controllers;
 
@@ -17,17 +16,16 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Administrator")]
-    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAll()
+    public async Task<ActionResult<IEnumerable<UserEntity>>> GetAll()
     {
         var users = await _userService.GetAllAsync();
         return Ok(users);
     }
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<ApplicationUser>> GetById(int id)
+    [HttpGet("{userId:guid}")]
+    public async Task<ActionResult<UserEntity>> GetById(Guid userId)
     {
-        var user = await _userService.GetByIdAsync(id);
+        var user = await _userService.GetByIdAsync(userId);
         if (user is null)
         {
             return NotFound();
@@ -37,16 +35,21 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApplicationUser>> Create([FromBody] ApplicationUser user)
+    public async Task<ActionResult<UserEntity>> Create([FromBody] UserEntity user)
     {
+        if (user.UserId == Guid.Empty)
+        {
+            return BadRequest("UserId is required.");
+        }
+
         var created = await _userService.CreateAsync(user);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        return CreatedAtAction(nameof(GetById), new { userId = created.UserId }, created);
     }
 
-    [HttpPut("{id:int}")]
-    public async Task<ActionResult<ApplicationUser>> Update(int id, [FromBody] ApplicationUser user)
+    [HttpPut("{userId:guid}")]
+    public async Task<ActionResult<UserEntity>> Update(Guid userId, [FromBody] UserEntity user)
     {
-        var updated = await _userService.UpdateAsync(id, user);
+        var updated = await _userService.UpdateAsync(userId, user);
         if (updated is null)
         {
             return NotFound();
@@ -55,10 +58,10 @@ public class UserController : ControllerBase
         return Ok(updated);
     }
 
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id)
+    [HttpDelete("{userId:guid}")]
+    public async Task<IActionResult> Delete(Guid userId)
     {
-        var deleted = await _userService.DeleteAsync(id);
+        var deleted = await _userService.DeleteAsync(userId);
         if (!deleted)
         {
             return NotFound();
@@ -67,4 +70,3 @@ public class UserController : ControllerBase
         return NoContent();
     }
 }
-
