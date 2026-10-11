@@ -73,4 +73,5 @@ jobs:
             order.api \
             user.api \
             apigateway \
-            identitywebapi
+            identitywebapi \
+            notification.webapi

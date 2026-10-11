@@ -15,4 +15,8 @@ public interface IAccountService
     Task ForgotPasswordAsync(ForgotPasswordRequest request);
 
     Task<AuthOperationResult> ResetPasswordAsync(ResetPasswordRequest request);
+
+    Task<AuthOperationResult> VerifyEmailAsync(string? token);
+
+    Task ResendVerificationAsync(string email);
 }

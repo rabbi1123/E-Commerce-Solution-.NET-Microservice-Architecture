@@ -10,6 +10,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/User/User.API/User.API.csproj", "Services/User/User.API/"]
 COPY ["BuildingBlocks/Eventbus.Messages/Eventbus.Messages.csproj", "BuildingBlocks/Eventbus.Messages/"]
+COPY ["BuildingBlocks/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj", "BuildingBlocks/EventBus.RabbitMQ/"]
 RUN dotnet restore "./Services/User/User.API/User.API.csproj"
 COPY . .
 WORKDIR "/src/Services/User/User.API"

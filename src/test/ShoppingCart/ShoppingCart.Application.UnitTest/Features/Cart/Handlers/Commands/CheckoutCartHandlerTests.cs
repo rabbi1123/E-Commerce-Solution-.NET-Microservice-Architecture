@@ -1,5 +1,5 @@
+using EventBus.RabbitMQ;
 using Eventbus.Messages.Events;
-using MassTransit;
 using MediatR;
 using Moq;
 using ShoppingCart.Application.DTOs.Cart;
@@ -20,7 +20,7 @@ public class CheckoutCartHandlerTests
         repo.Setup(r => r.GetCartWithDetailsByUserId("ghost"))
             .Returns(Task.FromResult<CartHeader>(null!));
 
-        var publish = new Mock<IPublishEndpoint>();
+        var publish = new Mock<IEventBus>();
 
         var sut = new CheckoutCartHandler(repo.Object, CartHandlerMapperMocks.ForCheckout(), publish.Object);
 
@@ -29,7 +29,7 @@ public class CheckoutCartHandlerTests
 
         Assert.Equal(Unit.Value, result);
         publish.Verify(
-            p => p.Publish(It.IsAny<BasketCheckoutEvent>(), It.IsAny<CancellationToken>()),
+            p => p.PublishAsync(It.IsAny<BasketCheckoutEvent>(), It.IsAny<CancellationToken>()),
             Times.Never);
         repo.Verify(r => r.Delete(It.IsAny<CartHeader>()), Times.Never);
     }
@@ -49,10 +49,10 @@ public class CheckoutCartHandlerTests
         repo.Setup(r => r.GetCartWithDetailsByUserId("alice")).ReturnsAsync(basket);
 
         BasketCheckoutEvent? published = null;
-        var publish = new Mock<IPublishEndpoint>();
+        var publish = new Mock<IEventBus>();
         publish
-            .Setup(p => p.Publish(It.IsAny<BasketCheckoutEvent>(), It.IsAny<CancellationToken>()))
-            .Callback<object, CancellationToken>((msg, _) => published = (BasketCheckoutEvent)msg)
+            .Setup(p => p.PublishAsync(It.IsAny<BasketCheckoutEvent>(), It.IsAny<CancellationToken>()))
+            .Callback<BasketCheckoutEvent, CancellationToken>((msg, _) => published = msg)
             .Returns(Task.CompletedTask);
 
         var checkoutDto = new BasketCheckout
@@ -82,7 +82,7 @@ public class CheckoutCartHandlerTests
         Assert.Equal(123.45, published!.TotalPrice);
         Assert.Equal("alice", published.UserName);
         publish.Verify(
-            p => p.Publish(It.IsAny<BasketCheckoutEvent>(), It.IsAny<CancellationToken>()),
+            p => p.PublishAsync(It.IsAny<BasketCheckoutEvent>(), It.IsAny<CancellationToken>()),
             Times.Once);
         repo.Verify(r => r.Delete(basket), Times.Once);
     }

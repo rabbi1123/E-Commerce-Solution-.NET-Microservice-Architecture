@@ -1,6 +1,7 @@
 using IdentityWebAPI.DTOs;
 using IdentityWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace IdentityWebAPI.Controllers;
 
@@ -16,6 +17,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
+    [EnableRateLimiting("auth")]
     public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterRequest request)
     {
         var result = await _accountService.RegisterAsync(request);
@@ -23,6 +25,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
+    [EnableRateLimiting("auth")]
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request)
     {
         var result = await _accountService.LoginAsync(request);
@@ -44,6 +47,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("forgot-password")]
+    [EnableRateLimiting("auth")]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
     {
         await _accountService.ForgotPasswordAsync(request);
@@ -55,6 +59,22 @@ public class AccountController : ControllerBase
     {
         var result = await _accountService.ResetPasswordAsync(request);
         return ToActionResult(result);
+    }
+
+    [HttpGet("verify-email")]
+    [EnableRateLimiting("auth")]
+    public async Task<IActionResult> VerifyEmail([FromQuery] string? token)
+    {
+        var result = await _accountService.VerifyEmailAsync(token);
+        return ToActionResult(result);
+    }
+
+    [HttpPost("resend-verification")]
+    [EnableRateLimiting("auth")]
+    public async Task<IActionResult> ResendVerification([FromBody] ResendVerificationRequest request)
+    {
+        await _accountService.ResendVerificationAsync(request.Email);
+        return Ok(new { message = "If an account with that email exists and is not yet verified, a verification link has been sent." });
     }
 
     private ActionResult ToActionResult(AuthOperationResult result)

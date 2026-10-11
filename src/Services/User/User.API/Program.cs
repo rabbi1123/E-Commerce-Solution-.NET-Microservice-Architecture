@@ -1,3 +1,4 @@
+using EventBus.RabbitMQ;
 using Eventbus.Messages.Common;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -15,18 +16,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddMassTransit(config =>
+builder.Services.AddRabbitMqEventBus(builder.Configuration, bus =>
 {
-    config.SetKebabCaseEndpointNameFormatter();
-    config.AddConsumer<UserRegistrationConsumer>();
-    config.UsingRabbitMq((ctx, cfg) =>
-    {
-        cfg.Host(Environment.GetEnvironmentVariable("EventBusSettings__HostAddress"));
-        cfg.ReceiveEndpoint(EventBusConstants.UserRegistrationQueue, c =>
-        {
-            c.ConfigureConsumer<UserRegistrationConsumer>(ctx);
-        });
-    });
+    bus.AddConsumer<UserRegistrationConsumer>()
+        .Endpoint(e => e.Name = EventBusConstants.UserRegistrationQueue);
 });
 builder.Services.AddScoped<UserRegistrationConsumer>();
 

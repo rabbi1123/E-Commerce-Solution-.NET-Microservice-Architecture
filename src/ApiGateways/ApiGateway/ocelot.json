@@ -3,7 +3,7 @@
     //Identity Web API
     {
       "UpstreamPathTemplate": "/Account/{action}",
-      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamHttpMethod": [ "Get", "Post" ],
       "DownstreamPathTemplate": "/api/Account/{action}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -170,6 +170,32 @@
       ],
       "UpstreamPathTemplate": "/User/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ]
+    },
+
+    //Notification
+    {
+      "DownstreamPathTemplate": "/api/Notification",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notification.webapi",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/Notification",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Notification/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notification.webapi",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/Notification/{id}",
+      "UpstreamHttpMethod": [ "Get" ]
     }
   ],
   "GlobalConfiguration": {

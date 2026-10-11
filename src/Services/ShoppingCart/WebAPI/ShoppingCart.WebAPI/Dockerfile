@@ -11,6 +11,7 @@ WORKDIR /src
 COPY ["Services/ShoppingCart/WebAPI/ShoppingCart.WebAPI/ShoppingCart.WebAPI.csproj", "Services/ShoppingCart/WebAPI/ShoppingCart.WebAPI/"]
 COPY ["Services/ShoppingCart/Core/ShoppingCart.Application/ShoppingCart.Application.csproj", "Services/ShoppingCart/Core/ShoppingCart.Application/"]
 COPY ["BuildingBlocks/Eventbus.Messages/Eventbus.Messages.csproj", "BuildingBlocks/Eventbus.Messages/"]
+COPY ["BuildingBlocks/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj", "BuildingBlocks/EventBus.RabbitMQ/"]
 COPY ["Services/ShoppingCart/Core/ShoppingCart.Domain/ShoppingCart.Domain.csproj", "Services/ShoppingCart/Core/ShoppingCart.Domain/"]
 COPY ["Services/ShoppingCart/Infrastructure/ShoppingCart.Infrastructure/ShoppingCart.Infrastructure.csproj", "Services/ShoppingCart/Infrastructure/ShoppingCart.Infrastructure/"]
 RUN dotnet restore "./Services/ShoppingCart/WebAPI/ShoppingCart.WebAPI/ShoppingCart.WebAPI.csproj"
