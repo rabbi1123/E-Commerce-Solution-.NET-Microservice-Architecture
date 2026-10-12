@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using EventBus.RabbitMQ;
 using Eventbus.Messages.Events;
-using MassTransit;
 using MediatR;
 using ShoppingCart.Application.Features.Cart.Requests.Commands;
 using ShoppingCart.Application.Persistence.Contracts;
@@ -11,13 +11,13 @@ namespace ShoppingCart.Application.Features.Cart.Handlers.Commands
 	{
 		private readonly ICartHeaderRepository cartRepository;
 		private readonly IMapper mapper;
-		private readonly IPublishEndpoint publishEndpoint;
+		private readonly IEventBus eventBus;
 
-		public CheckoutCartHandler(ICartHeaderRepository cartRepository, IMapper mapper, IPublishEndpoint publishEndpoint)
+		public CheckoutCartHandler(ICartHeaderRepository cartRepository, IMapper mapper, IEventBus eventBus)
 		{
 			this.cartRepository = cartRepository;
 			this.mapper = mapper;
-			this.publishEndpoint = publishEndpoint;
+			this.eventBus = eventBus;
 		}
 		public async Task<Unit> Handle(CheckoutCart request, CancellationToken cancellationToken)
 		{
@@ -28,7 +28,7 @@ namespace ShoppingCart.Application.Features.Cart.Handlers.Commands
 			}
 			var eventMessage = mapper.Map<BasketCheckoutEvent>(request.BasketCheckout);
 			eventMessage.TotalPrice = basket.TotalPrice;
-			await publishEndpoint.Publish(eventMessage);
+			await eventBus.PublishAsync(eventMessage, cancellationToken);
 			await cartRepository.Delete(basket);
 			return Unit.Value;
 		}

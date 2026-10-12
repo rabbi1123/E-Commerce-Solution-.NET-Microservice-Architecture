@@ -1,12 +1,14 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using IdentityWebAPI.Data;
 using IdentityWebAPI.Models;
 using IdentityWebAPI.Repositories;
 using IdentityWebAPI.Services;
+using EventBus.RabbitMQ;
 using IdentityWebAPI.Settings;
-using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -59,19 +61,28 @@ builder.Services
         };
     });
 
+builder.Services.Configure<IdentitySettings>(builder.Configuration.GetSection(IdentitySettings.SectionName));
+
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IEmailSender, LoggingEmailSender>();
+builder.Services.AddScoped<IEmailVerificationTokenService, EmailVerificationTokenService>();
 
-builder.Services.AddMassTransit(config =>
+builder.Services.AddRateLimiter(options =>
 {
-    config.SetKebabCaseEndpointNameFormatter();
-    config.UsingRabbitMq((ctx, cfg) =>
-    {
-        cfg.Host(Environment.GetEnvironmentVariable("EventBusSettings__HostAddress"));
-    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("auth", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0
+            }));
 });
+
+builder.Services.AddRabbitMqEventBus(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -92,6 +103,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 

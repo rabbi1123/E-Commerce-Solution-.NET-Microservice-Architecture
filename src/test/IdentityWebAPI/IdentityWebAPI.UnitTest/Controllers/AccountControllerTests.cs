@@ -208,4 +208,51 @@ public class AccountControllerTests
         Assert.Same(errors, badRequest.Value);
         mockService.Verify(s => s.ResetPasswordAsync(request), Times.Once);
     }
+
+    [Fact]
+    public async Task VerifyEmail_WhenSucceeded_ReturnsOk()
+    {
+        var mockService = new Mock<IAccountService>();
+        mockService
+            .Setup(s => s.VerifyEmailAsync("token"))
+            .ReturnsAsync(AuthOperationResult.Success(message: "Email address verified."));
+
+        var controller = new AccountController(mockService.Object);
+
+        var result = await controller.VerifyEmail("token");
+
+        Assert.IsType<OkObjectResult>(result);
+        mockService.Verify(s => s.VerifyEmailAsync("token"), Times.Once);
+    }
+
+    [Fact]
+    public async Task VerifyEmail_WhenInvalid_ReturnsBadRequest()
+    {
+        var mockService = new Mock<IAccountService>();
+        mockService
+            .Setup(s => s.VerifyEmailAsync("bad-token"))
+            .ReturnsAsync(AuthOperationResult.Fail(AuthErrorType.BadRequest, "This verification link is invalid or has expired."));
+
+        var controller = new AccountController(mockService.Object);
+
+        var result = await controller.VerifyEmail("bad-token");
+
+        Assert.IsType<BadRequestObjectResult>(result);
+        mockService.Verify(s => s.VerifyEmailAsync("bad-token"), Times.Once);
+    }
+
+    [Fact]
+    public async Task ResendVerification_ReturnsOkWithoutRevealingAccount()
+    {
+        var request = new ResendVerificationRequest { Email = "user@example.com" };
+        var mockService = new Mock<IAccountService>();
+        mockService.Setup(s => s.ResendVerificationAsync(request.Email)).Returns(Task.CompletedTask);
+
+        var controller = new AccountController(mockService.Object);
+
+        var result = await controller.ResendVerification(request);
+
+        Assert.IsType<OkObjectResult>(result);
+        mockService.Verify(s => s.ResendVerificationAsync(request.Email), Times.Once);
+    }
 }

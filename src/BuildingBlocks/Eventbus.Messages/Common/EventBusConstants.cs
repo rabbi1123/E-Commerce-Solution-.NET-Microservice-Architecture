@@ -10,5 +10,6 @@ namespace Eventbus.Messages.Common
 	{
 		public const string BasketCheckoutQueue = "basketcheckout-queue";
 		public const string UserRegistrationQueue = "userregistration-queue";
+		public const string UserVerificationEmailQueue = "userverificationemail-queue";
 	}
 }

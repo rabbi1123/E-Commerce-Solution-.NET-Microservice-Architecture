@@ -57,6 +57,17 @@ services:
     restart: always
     ports:
       - 1435:1433
+
+  notification.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: notification.database
+    environment:
+      - SA_PASSWORD=${SA_PASSWORD}
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    restart: always
+    ports:
+      - 1436:1433
    
   rabbitmq:
     image: rabbitmq:3-management
@@ -68,6 +79,13 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    ports:
+      - 1025:1025
+      - 8025:8025
 
   productcatalog.webapi:
     image: ${DOCKER_REGISTRY-}productcatalogwebapi
@@ -145,6 +163,25 @@ services:
       - user.database
       - rabbitmq
 
+  notification.webapi:
+    image: ${DOCKER_REGISTRY-}notificationwebapi
+    container_name: notification.webapi
+    build:
+      context: .
+      dockerfile: Services/Notification/WebAPI/Notification.WebAPI/Dockerfile
+    environment:
+      - ConnectionStrings__NotificationConnectionString=Server=notification.database;Database=NotificationDb;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True
+      - Smtp__Host=mailpit
+      - Smtp__Port=1025
+      - Smtp__From=noreply@ecommerce.local
+      - Smtp__EnableSsl=false
+      - EventBusSettings__HostAddress=amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
+      - Notifications__PublicWebBaseUrl=http://localhost:8086
+    depends_on:
+      - notification.database
+      - mailpit
+      - rabbitmq
+
   apigateway:
     image: ${DOCKER_REGISTRY-}apigateway
     container_name: apigateway
@@ -158,6 +195,7 @@ services:
       - order.api
       - user.api
       - identitywebapi
+      - notification.webapi
 
   identitywebapi:
     image: ${DOCKER_REGISTRY-}identitywebapi
@@ -171,6 +209,7 @@ services:
       - Jwt__Issuer=IdentityWebAPI
       - Jwt__Audience=ECommerceClients
       - EventBusSettings__HostAddress=amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672
+      - Identity__EmailVerificationTokenMinutes=30
     depends_on:
       - identitydb
       - rabbitmq

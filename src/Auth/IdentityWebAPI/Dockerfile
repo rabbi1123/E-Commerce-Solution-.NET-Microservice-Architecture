@@ -10,6 +10,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Auth/IdentityWebAPI/IdentityWebAPI.csproj", "Auth/IdentityWebAPI/"]
 COPY ["BuildingBlocks/Eventbus.Messages/Eventbus.Messages.csproj", "BuildingBlocks/Eventbus.Messages/"]
+COPY ["BuildingBlocks/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj", "BuildingBlocks/EventBus.RabbitMQ/"]
 RUN dotnet restore "./Auth/IdentityWebAPI/IdentityWebAPI.csproj"
 COPY . .
 WORKDIR "/src/Auth/IdentityWebAPI"

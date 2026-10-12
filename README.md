@@ -652,7 +652,6 @@ For gateway-level exploration, call routes through `http://localhost:8086` using
 |-------|----------|
 | Framework | ASP.NET Core built-in `ILogger<T>` |
 | Controllers / consumers | Structured messages with placeholders (e.g. user ids) |
-| Identity email (dev) | `LoggingEmailSender` writes reset links to logs instead of SMTP |
 
 Recommended production enhancements (see [Future Improvements](#-future-improvements)):
 

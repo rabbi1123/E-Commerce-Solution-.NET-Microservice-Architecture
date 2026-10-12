@@ -56,3 +56,10 @@ services:
        - ASPNETCORE_HTTP_PORTS=8080
      ports:
        - "8087:8080"
+
+   notification.webapi:
+     environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_HTTP_PORTS=8080
+     ports:
+       - "8088:8080"

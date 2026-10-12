@@ -14,7 +14,7 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
 builder.Services.AddScoped<DiscountGrpcService>();
 
 builder.Services.AddControllers();
-builder.Services.ConfigureShoppingCartApplicationServices();
+builder.Services.ConfigureShoppingCartApplicationServices(builder.Configuration);
 builder.Services.ConfigureShoppingCartInfrastructureServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
